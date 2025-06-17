@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+# Add ENV variables for colima
+export DOCKER_HOST=unix:///Users/karlchow/.colima/default/docker.sock
+export TESTCONTAINERS_RYUK_DISABLED=true
+export TESTCONTAINERS_CHECKS_DISABLE=true
+
 # Run lint-staged to check only the files that are being committed
 pnpm lint-staged
 
