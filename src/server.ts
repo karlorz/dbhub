@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 import { ConnectorManager } from "./connectors/manager.js";
 import { ConnectorRegistry } from "./connectors/interface.js";
 import { resolveDSN, resolveTransport, resolvePort, redactDSN, isReadOnlyMode } from "./config/env.js";
-import { registerResources } from "./resources/index.js";
+import { registerResources, registerDynamicResources } from "./resources/index.js";
 import { registerTools } from "./tools/index.js";
 import { registerPrompts } from "./prompts/index.js";
 
@@ -74,29 +74,33 @@ See documentation for more details on configuring database connections.
       process.exit(1);
     }
 
-    // Create MCP server factory function for HTTP transport
-    const createServer = () => {
-      const server = new McpServer({
-        name: SERVER_NAME,
-        version: SERVER_VERSION,
-      });
-
-      // Register resources, tools, and prompts
-      registerResources(server);
-      registerTools(server);
-      registerPrompts(server);
-      
-      return server;
-    };
-
-    // Create server factory function (will be used for both STDIO and HTTP transports)
-
     // Create connector manager and connect to database
     const connectorManager = new ConnectorManager();
     console.error(`Connecting with DSN: ${redactDSN(dsnData.dsn)}`);
     console.error(`DSN source: ${dsnData.source}`);
 
     await connectorManager.connectWithDSN(dsnData.dsn);
+
+    // Create MCP server factory function for HTTP transport
+    const createServer = async () => {
+      const server = new McpServer({
+        name: SERVER_NAME,
+        version: SERVER_VERSION,
+      });
+
+      // Register static resources, tools, and prompts
+      registerResources(server);
+      registerTools(server);
+      registerPrompts(server);
+      
+      // Register dynamic resources after database connection is established
+      const currentConnector = ConnectorManager.getCurrentConnector();
+      await registerDynamicResources(server, currentConnector);
+      
+      return server;
+    };
+
+    // Create server factory function (will be used for both STDIO and HTTP transports)
 
     // Resolve transport type
     const transportData = resolveTransport();
@@ -159,7 +163,7 @@ See documentation for more details on configuring database connections.
             sessionIdGenerator: undefined, // Disable session management for stateless mode
             enableJsonResponse: false // Use SSE streaming
           });
-          const server = createServer();
+          const server = await createServer();
 
           await server.connect(transport);
           await transport.handleRequest(req, res, req.body);
@@ -182,7 +186,7 @@ See documentation for more details on configuring database connections.
       });
     } else {
       // Set up STDIO transport
-      const server = createServer();
+      const server = await createServer();
       const transport = new StdioServerTransport();
       console.error("Starting with STDIO transport");
       await server.connect(transport);
