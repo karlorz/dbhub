@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { Wait } from 'testcontainers';
 import { PostgresConnector } from '../postgres/index.js';
 import { IntegrationTestBase, type TestContainer, type DatabaseTestConfig } from './shared/integration-test-base.js';
 import type { Connector } from '../interface.js';
@@ -34,6 +35,8 @@ class PostgreSQLIntegrationTest extends IntegrationTestBase<PostgreSQLTestContai
       .withDatabase('testdb')
       .withUsername('testuser')
       .withPassword('testpass')
+      .withStartupTimeout(120000)
+      .withWaitStrategy(Wait.forListeningPorts())
       .start();
     
     return new PostgreSQLTestContainer(container);

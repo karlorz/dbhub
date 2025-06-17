@@ -473,34 +473,35 @@ export class MariaDBConnector implements Connector {
     }
 
     try {
-      // Use pool.query - MariaDB driver returns rows directly for single statements
-      const results = await this.pool.query(sql) as any;
-      
-      // MariaDB driver returns different formats:
-      // - Single statement: returns rows array directly
-      // - Multiple statements: returns array of results (when multipleStatements is true)
-      
-      if (Array.isArray(results)) {
-        // Check if this looks like multiple statement results
-        // Multiple statements return an array where each element might be an array of results
-        if (results.length > 0 && Array.isArray(results[0]) && results[0].length > 0) {
-          // This might be multiple statement results - flatten them
-          let allRows: any[] = [];
-          
-          for (const result of results) {
-            if (Array.isArray(result)) {
+      // Check if this is a multi-statement query
+      const statements = sql.split(';')
+        .map(statement => statement.trim())
+        .filter(statement => statement.length > 0);
+
+      if (statements.length === 1) {
+        // Single statement
+        const results = await this.pool.query(statements[0]) as any;
+        return Array.isArray(results) ? { rows: results } : { rows: [] };
+      } else {
+        // Multiple statements - execute all in same connection to maintain session state
+        let allRows: any[] = [];
+        
+        // Get a connection from the pool to ensure all statements execute in same session
+        const connection = await this.pool.getConnection();
+        try {
+          for (const statement of statements) {
+            const result = await connection.query(statement) as any;
+            
+            // Collect rows from SELECT statements and other queries that return data
+            if (Array.isArray(result) && result.length > 0) {
               allRows.push(...result);
             }
           }
-          
-          return { rows: allRows };
-        } else {
-          // Single statement result - results is the rows array
-          return { rows: results };
+        } finally {
+          connection.release();
         }
-      } else {
-        // Non-array result (like for INSERT/UPDATE/DELETE without RETURNING)
-        return { rows: [] };
+
+        return { rows: allRows };
       }
     } catch (error) {
       console.error("Error executing query:", error);

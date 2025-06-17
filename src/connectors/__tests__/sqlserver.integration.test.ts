@@ -42,7 +42,7 @@ class SQLServerIntegrationTest extends IntegrationTestBase<SQLServerTestContaine
   }
 
   async createContainer(): Promise<SQLServerTestContainer> {
-    const container = await new MSSQLServerContainer('mcr.microsoft.com/mssql/server:2019-latest')
+    const container = await new MSSQLServerContainer('mcr.microsoft.com/azure-sql-edge:latest')
       .acceptLicense() // Required for SQL Server containers
       .withPassword('Password123!')
       .start();
@@ -269,7 +269,8 @@ describe('SQL Server Connector Integration Tests', () => {
       `);
       
       expect(result.rows).toHaveLength(1);
-      expect(result.rows[0].sql_version).toContain('Microsoft SQL Server');
+      // Azure SQL Edge reports as "Microsoft Azure SQL Edge" instead of "Microsoft SQL Server"
+      expect(result.rows[0].sql_version).toMatch(/Microsoft (SQL Server|Azure SQL Edge)/);
       expect(result.rows[0].current_db).toBeDefined();
       expect(result.rows[0].current_user_name).toBeDefined();
       expect(result.rows[0].current_datetime).toBeDefined();
