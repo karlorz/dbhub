@@ -4,7 +4,7 @@
 <p align="center">
 <a href="https://dbhub.ai/" target="_blank">
 <picture>
-  <img src="https://raw.githubusercontent.com/bytebase/dbhub/main/resources/images/logo-full.webp" width="50%">
+  <img src="https://raw.githubusercontent.com/karlorz/dbhub/main/resources/images/logo-full.webp" width="50%">
 </picture>
 </a>
 </p>
@@ -34,9 +34,9 @@ DBHub is a universal database gateway implementing the Model Context Protocol (M
 
 ## Demo HTTP Endpoint
 
-https://demo.dbhub.ai/message connects a [sample employee database](https://github.com/bytebase/employee-sample-database). You can point Cursor or MCP Inspector to it to see it in action.
+https://demo.dbhub.ai/message connects a [sample employee database](https://github.com/karlorz/employee-sample-database). You can point Cursor or MCP Inspector to it to see it in action.
 
-![mcp-inspector](https://raw.githubusercontent.com/bytebase/dbhub/main/resources/images/mcp-inspector.webp)
+![mcp-inspector](https://raw.githubusercontent.com/karlorz/dbhub/main/resources/images/mcp-inspector.webp)
 
 ## Supported Matrix
 
@@ -73,7 +73,7 @@ https://demo.dbhub.ai/message connects a [sample employee database](https://gith
 docker run --rm --init \
    --name dbhub \
    --publish 8080:8080 \
-   bytebase/dbhub \
+   karlorz/dbhub \
    --transport http \
    --port 8080 \
    --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
@@ -85,13 +85,13 @@ docker run --rm --init \
 
 ```bash
 # PostgreSQL example
-npx @bytebase/dbhub --transport http --port 8080 --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
+npx @karlorz/dbhub --transport http --port 8080 --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
 ```
 
 
 ### Claude Desktop
 
-![claude-desktop](https://raw.githubusercontent.com/bytebase/dbhub/main/resources/images/claude-desktop.webp)
+![claude-desktop](https://raw.githubusercontent.com/karlorz/dbhub/main/resources/images/claude-desktop.webp)
 
 - Claude Desktop only supports `stdio` transport https://github.com/orgs/modelcontextprotocol/discussions/16
 
@@ -105,7 +105,7 @@ npx @bytebase/dbhub --transport http --port 8080 --dsn "postgres://user:password
         "run",
         "-i",
         "--rm",
-        "bytebase/dbhub",
+        "karlorz/dbhub",
         "--transport",
         "stdio",
         "--dsn",
@@ -117,7 +117,7 @@ npx @bytebase/dbhub --transport http --port 8080 --dsn "postgres://user:password
       "command": "npx",
       "args": [
         "-y",
-        "@bytebase/dbhub",
+        "@karlorz/dbhub",
         "--transport",
         "stdio",
         "--dsn",
@@ -132,7 +132,7 @@ npx @bytebase/dbhub --transport http --port 8080 --dsn "postgres://user:password
 
 [![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=dbhub&config=eyJjb21tYW5kIjoibnB4IEBieXRlYmFzZS9kYmh1YiIsImVudiI6eyJUUkFOU1BPUlQiOiJzdGRpbyIsIkRTTiI6InBvc3RncmVzOi8vdXNlcjpwYXNzd29yZEBsb2NhbGhvc3Q6NTQzMi9kYm5hbWU%2Fc3NsbW9kZT1kaXNhYmxlIiwiUkVBRE9OTFkiOiJ0cnVlIn19)
 
-![cursor](https://raw.githubusercontent.com/bytebase/dbhub/main/resources/images/cursor.webp)
+![cursor](https://raw.githubusercontent.com/karlorz/dbhub/main/resources/images/cursor.webp)
 
 - Cursor supports both `stdio` and `http`.
 - Follow [Cursor MCP guide](https://docs.cursor.com/context/model-context-protocol) and make sure to use [Agent](https://docs.cursor.com/chat/agent) mode.
@@ -176,10 +176,10 @@ You can run DBHub in read-only mode, which restricts SQL query execution to read
 
 ```bash
 # Enable read-only mode
-npx @bytebase/dbhub --readonly --dsn "postgres://user:password@localhost:5432/dbname"
+npx @karlorz/dbhub --readonly --dsn "postgres://user:password@localhost:5432/dbname"
 ```
 
-In read-only mode, only [readonly SQL operations](https://github.com/bytebase/dbhub/blob/main/src/utils/allowed-keywords.ts) are allowed.
+In read-only mode, only [readonly SQL operations](https://github.com/karlorz/dbhub/blob/main/src/utils/allowed-keywords.ts) are allowed.
 
 This provides an additional layer of security when connecting to production databases.
 
@@ -193,14 +193,14 @@ For real databases, a Database Source Name (DSN) is required. You can provide th
 - **Command line argument** (highest priority):
 
   ```bash
-  npx @bytebase/dbhub  --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
+  npx @karlorz/dbhub  --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
   ```
 
 - **Environment variable** (second priority):
 
   ```bash
   export DSN="postgres://user:password@localhost:5432/dbname?sslmode=disable"
-  npx @bytebase/dbhub
+  npx @karlorz/dbhub
   ```
 
 - **Environment file** (third priority):
@@ -236,12 +236,12 @@ Extra query parameters:
 - **stdio** (default) - for direct integration with tools like Claude Desktop:
 
   ```bash
-  npx @bytebase/dbhub --transport stdio --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
+  npx @karlorz/dbhub --transport stdio --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
   ```
 
 - **http** - for browser and network clients:
   ```bash
-  npx @bytebase/dbhub --transport http --port 5678 --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
+  npx @karlorz/dbhub --transport http --port 5678 --dsn "postgres://user:password@localhost:5432/dbname?sslmode=disable"
   ```
 
 ### Command line options
@@ -394,10 +394,10 @@ Connect to the DBHub server `/message` endpoint
 
 ## Contributors
 
-<a href="https://github.com/bytebase/dbhub/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=bytebase/dbhub" />
+<a href="https://github.com/karlorz/dbhub/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=karlorz/dbhub" />
 </a>
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=bytebase/dbhub&type=Date)](https://www.star-history.com/#bytebase/dbhub&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=karlorz/dbhub&type=Date)](https://www.star-history.com/#karlorz/dbhub&Date)
