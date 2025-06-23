@@ -10,8 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://cursor.com/install-mcp?name=dbhub&config=eyJjb21tYW5kIjoibnB4IEBieXRlYmFzZS9kYmh1YiIsImVudiI6eyJUUkFOU1BPUlQiOiJzdGRpbyIsIkRTTiI6InBvc3RncmVzOi8vdXNlcjpwYXNzd29yZEBsb2NhbGhvc3Q6NTQzMi9kYm5hbWU%2Fc3NsbW9kZT1kaXNhYmxlIiwiUkVBRE9OTFkiOiJ0cnVlIn19"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add dbhub MCP server to Cursor" height="32" /></a>
-  <a href="https://discord.gg/BjEkZpsJzn"><img src="https://img.shields.io/badge/%20-Hang%20out%20on%20Discord-5865F2?style=for-the-badge&logo=discord&labelColor=EEEEEE" alt="Join our Discord" height="32" /></a>
+  <a href="https://cursor.com/install-mcp?name=dbhub-postgres&config=eyJjb21tYW5kIjoibnB4IC15IEBrYXJsb3J6L2RiaHViQGxhdGVzdCAtLXRyYW5zcG9ydCBzdGRpbyAtLWRzbiBwb3N0Z3JlczovL3Bvc3RncmVzOnBvc3RncmVzQGxvY2FsaG9zdDo1NDMyL3RhYmxlMDE%2Fc3NsbW9kZT1kaXNhYmxlIn0%3D"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add dbhub MCP server to Cursor" height="32" /></a>
 </p>
 
 DBHub is a universal database gateway implementing the Model Context Protocol (MCP) server interface. This gateway allows MCP-compatible clients to connect to and explore different databases.
@@ -130,7 +129,7 @@ npx @karlorz/dbhub --transport http --port 8080 --dsn "postgres://user:password@
 
 ### Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=dbhub&config=eyJjb21tYW5kIjoibnB4IEBieXRlYmFzZS9kYmh1YiIsImVudiI6eyJUUkFOU1BPUlQiOiJzdGRpbyIsIkRTTiI6InBvc3RncmVzOi8vdXNlcjpwYXNzd29yZEBsb2NhbGhvc3Q6NTQzMi9kYm5hbWU%2Fc3NsbW9kZT1kaXNhYmxlIiwiUkVBRE9OTFkiOiJ0cnVlIn19)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=dbhub-postgres&config=eyJjb21tYW5kIjoibnB4IC15IEBrYXJsb3J6L2RiaHViQGxhdGVzdCAtLXRyYW5zcG9ydCBzdGRpbyAtLWRzbiBwb3N0Z3JlczovL3Bvc3RncmVzOnBvc3RncmVzQGxvY2FsaG9zdDo1NDMyL3RhYmxlMDE%2Fc3NsbW9kZT1kaXNhYmxlIn0%3D)
 
 ![cursor](https://raw.githubusercontent.com/karlorz/dbhub/main/resources/images/cursor.webp)
 
@@ -336,7 +335,7 @@ docker system df
 docker pull postgres:15-alpine
 docker pull mysql:8.0
 docker pull mariadb:10.11
-docker pull mcr.microsoft.com/mssql/server:2019-latest
+docker pull mcr.microsoft.com/azure-sql-edge:latest
 ```
 
 **SQL Server Timeout Issues:**
@@ -378,6 +377,8 @@ The project includes pre-commit hooks to run tests automatically before each com
 ```bash
 # PostgreSQL example
 TRANSPORT=stdio DSN="postgres://user:password@localhost:5432/dbname?sslmode=disable" npx @modelcontextprotocol/inspector node /path/to/dbhub/dist/index.js
+# Production example
+TRANSPORT=stdio DSN="postgres://postgres:postgres@localhost:5432/table01" npx @modelcontextprotocol/inspector npx @karlorz/dbhub
 ```
 
 #### HTTP
